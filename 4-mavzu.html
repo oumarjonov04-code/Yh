@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4-mavzu: Masalalar yechish</title>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#18243a;--muted:#60708a;--blue:#225bd6;--cyan:#12a6bd;--orange:#f59e0b;--line:#dce5f1;--green:#138a58;--red:#c24141}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(120deg,#123a83,#176fba 60%,#16a6b7);color:white;padding:28px 18px 32px}
+.wrap{max-width:1120px;margin:auto;padding:0 16px}header h1{margin:0 0 8px;font-size:clamp(1.65rem,4vw,2.55rem);line-height:1.15}header p{margin:0;max-width:800px;color:#eaf7ff}
+nav{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 3px 14px #18243a0a}
+.navin{display:flex;gap:8px;overflow:auto;padding:10px 16px;max-width:1120px;margin:auto}
+nav a{white-space:nowrap;text-decoration:none;color:var(--ink);padding:8px 12px;border-radius:9px;font-size:.92rem}nav a:hover{background:#eaf1ff;color:var(--blue)}
+main{max-width:1120px;margin:22px auto;padding:0 16px 42px}
+section{scroll-margin-top:78px;margin:20px 0 28px}
+h2{font-size:1.45rem;margin:0 0 14px}h3{margin:0 0 10px;font-size:1.08rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0;box-shadow:0 5px 18px #1b35500a}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid .card{margin:0}
+.formula{background:#edf4ff;border:1px solid #d5e5ff;padding:12px 14px;border-radius:10px;font-weight:700;color:#17479c;display:inline-block;margin:4px 0}
+.small{color:var(--muted);font-size:.92rem}.tag{display:inline-block;background:#e7f8f8;color:#087887;border-radius:999px;padding:3px 9px;font-size:.78rem;font-weight:700}
+button{border:0;border-radius:10px;padding:10px 14px;background:var(--blue);color:white;font:inherit;font-weight:650;cursor:pointer;margin:4px 4px 4px 0}
+button.secondary{background:#eaf0fa;color:#1f3d6e}button.orange{background:#d97706}button:hover{filter:brightness(.96)}
+input[type=number],select{width:100%;padding:10px;border:1px solid #cbd7e7;border-radius:9px;background:white;color:var(--ink);font:inherit}
+label{display:block;font-size:.9rem;font-weight:650;margin:8px 0 4px}
+.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+canvas{display:block;width:100%;height:300px;border-radius:12px;background:linear-gradient(#f8fbff,#edf5ff);border:1px solid var(--line)}
+.result{background:#f0faf5;border:1px solid #c6edda;border-radius:10px;padding:12px;margin-top:10px}
+.problem{border-left:4px solid var(--cyan);padding:10px 14px;background:#f7fcfd;border-radius:0 10px 10px 0;margin:12px 0}
+.solution{display:none;padding:12px 14px;background:#f5f8fd;border-radius:10px;margin-top:8px}.solution.show{display:block}
+table{border-collapse:collapse;width:100%;margin:8px 0}td,th{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}th{background:#f0f5fb}
+.quizq{padding:14px 0;border-bottom:1px solid var(--line)}.quizq label{font-weight:400;display:flex;gap:8px;align-items:flex-start;margin:8px 0}.quizq input{margin-top:5px}
+footer{text-align:center;color:var(--muted);padding:24px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}canvas{height:250px}.card{padding:14px}}
+@media(max-width:430px){.controls{grid-template-columns:1fr}nav a{font-size:.85rem;padding:7px 9px}}
+@media print{nav,button,.controls{display:none!important}body{background:#fff}.card{box-shadow:none;break-inside:avoid}header{background:#fff;color:#111;border-bottom:2px solid #333}header p{color:#333}}
+.vdbar{display:flex;gap:10px;align-items:center;margin-top:10px}.vdbar input{flex:1}.vdbar span{font-variant-numeric:tabular-nums;font-weight:700;color:var(--muted);min-width:96px;text-align:center}.vdbar button{margin:0}
+#vdc{height:auto!important;aspect-ratio:16/9;background:#0f1e3a;cursor:pointer}.vdch{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.vdch button{font-size:.85rem;padding:6px 10px;margin:0;background:#eaf0fa;color:#1f3d6e}
+#vdw:fullscreen{background:#000;display:flex;flex-direction:column;justify-content:center;padding:10px}#vdw:fullscreen #vdc{max-height:calc(100vh - 90px);width:auto;max-width:100%;margin:0 auto}
+@media print{#video{display:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<span class="tag">10-sinf fizika</span>
+<h1>4-mavzu: Masalalar yechish</h1>
+<p>Markazga intilma kuch va gravitatsiya maydonidagi harakat. Formulalar, bosqichma-bosqich yechimlar, interaktiv simulyatsiyalar va bilimni tekshirish testi.</p>
+</div></header>
+<nav><div class="navin">
+<a href="#video">🎬 Video</a><a href="#formulalar">Formulalar</a><a href="#markaz">1. Markazga intilma kuch</a><a href="#gravitatsiya">2. Gravitatsiya</a><a href="#aralash">3. Aralash masalalar</a><a href="#test">Test</a>
+</div></nav>
+<main>
+<section id="video"><div class="card">
+<h2>🎬 Jonli video dars — 2 daqiqa</h2><p class="small">Masala yechish algoritmi, markazga intilma kuch, erkin tushish, tortishish va orbital tezlik masalalari animatsiyada.</p>
+<div id="vdw"><canvas id="vdc" width="960" height="540"></canvas>
+<div class="vdbar"><button id="vdp" title="Boshlash / to‘xtatish">▶</button><input id="vds" type="range" min="0" max="1200" value="0"><span id="vdt">0:00 / 2:00</span><button class="secondary" id="vdf" title="To‘liq ekran">⛶</button></div></div>
+<div class="vdch" id="vdch"></div>
+<p class="small">Video animatsiya va yozma izohlar bilan tayyorlangan. Bo‘limlarni tanlab, kerakli joyidan ko‘rishingiz mumkin.</p></div></section>
+<section id="kirish">
+<div class="card"><h2>Dars maqsadi</h2>
+<p>Aylana bo‘ylab harakat, gravitatsion tortishish, erkin tushish va orbital harakatga doir masalalarni fizik formulalar yordamida yechish.</p>
+<div class="grid">
+<div><h3>Masala yechish algoritmi</h3><ol><li>Berilganlarni yozing.</li><li>Topilishi kerak bo‘lgan kattalikni aniqlang.</li><li>Mos formulani tanlang.</li><li>Qiymatlarni SI birliklariga o‘tkazing.</li><li>Hisoblang va javobni birlik bilan yozing.</li></ol></div>
+<div><h3>Doimiy kattaliklar</h3><p><b>G</b> = 6,67 × 10⁻¹¹ N·m²/kg²</p><p><b>g</b> ≈ 9,8 m/s² (Yer sirtiga yaqin)</p><p><b>Yer radiusi</b> R ≈ 6,37 × 10⁶ m</p><p><b>Yer massasi</b> M ≈ 5,97 × 10²⁴ kg</p></div>
+</div></div>
+</section>
+<section id="formulalar">
+<h2>Asosiy formulalar jadvali</h2><div class="card"><table><thead><tr><th>Kattalik</th><th>Formula</th><th>Izoh</th></tr></thead><tbody>
+<tr><td>Markazga intilma tezlanish</td><td>a = v²/r</td><td>v — tezlik, r — radius</td></tr>
+<tr><td>Markazga intilma kuch</td><td>F = mv²/r</td><td>Kuch markazga yo‘nalgan</td></tr>
+<tr><td>Chiziqli va burchak tezlik</td><td>v = ωr</td><td>ω — burchak tezlik</td></tr>
+<tr><td>Aylanish davri</td><td>v = 2πr/T</td><td>T — bir aylanish vaqti</td></tr>
+<tr><td>Butun olam tortishish qonuni</td><td>F = Gm₁m₂/r²</td><td>r — jismlar markazlari orasidagi masofa</td></tr>
+<tr><td>Gravitatsion tezlanish</td><td>g = GM/r²</td><td>Markazdan r masofada</td></tr>
+<tr><td>Erkin tushish</td><td>v = v₀ + gt; h = v₀t + gt²/2</td><td>Pastga yo‘nalish musbat deb olindi</td></tr>
+<tr><td>Potensial energiya (Yer sirtiga yaqin)</td><td>Eₚ = mgh</td><td>h — tanlangan sathdan balandlik</td></tr>
+<tr><td>Birinchi kosmik tezlik</td><td>v₁ = √(GM/R) = √(gR)</td><td>Aylana orbitaga yaqinlashgan holda</td></tr>
+<tr><td>Ikkinchi kosmik tezlik</td><td>v₂ = √(2GM/R) = √(2gR)</td><td>Ideal holatda qochish tezligi</td></tr>
+</tbody></table><p class="small">Eslatma: vektor kattaliklarning yo‘nalishi muhim. Erkin tushish formulalarida g pastga yo‘nalgan tezlanish modulidir.</p></div>
+</section>
+<section id="markaz">
+<h2>1-reja. Markazga intilma kuch</h2>
+<div class="grid">
+<div class="card"><h3>Namuna masala 1</h3><p>Massasi 2 kg jism radiusi 4 m aylana bo‘ylab 6 m/s tezlikda harakatlanmoqda. Markazga intilma kuchni toping.</p>
+<div class="formula">F = mv²/r</div>
+<p><b>Berilgan:</b> m = 2 kg; v = 6 m/s; r = 4 m.</p><p><b>Yechish:</b> F = 2 × 6² / 4 = 72 / 4 = 18 N.</p><p><b>Javob:</b> 18 N.</p></div>
+<div class="card"><h3>Namuna masala 2</h3><p>Avtomobil 10 m radiusli burilishdan 5 m/s tezlikda o‘tmoqda. Markazga intilma tezlanishni toping.</p><div class="formula">a = v²/r</div><p><b>Yechish:</b> a = 5² / 10 = 25 / 10 = 2,5 m/s².</p><p><b>Javob:</b> 2,5 m/s².</p></div>
+</div>
+<div class="card"><h3>Simulyatsiya: aylana bo‘ylab harakat</h3><p class="small">Massa, tezlik va radiusni o‘zgartiring. Jismning harakati, tezlik vektori va markazga intilma kuch vektori yangilanadi.</p>
+<div class="controls">
+<div><label for="mass">Massa m (kg)</label><input id="mass" type="number" min="0.1" max="20" step="0.1" value="2"></div>
+<div><label for="speed">Tezlik v (m/s)</label><input id="speed" type="number" min="0.1" max="30" step="0.1" value="6"></div>
+<div><label for="radius">Radius r (m)</label><input id="radius" type="number" min="0.5" max="15" step="0.5" value="4"></div>
+</div><canvas id="circleCanvas" aria-label="Aylana bo‘ylab harakat animatsiyasi"></canvas>
+<div class="result" id="circleResult">Markazga intilma kuch: 18 N</div>
+<button id="circleStart">Boshlash</button><button class="secondary" id="circlePause">To‘xtatish</button><button class="secondary" id="circleReset">Qayta boshlash</button>
+</div>
+<div class="card"><h3>Mustaqil masala</h3><p>Massasi 0,5 kg bo‘lgan jism 2 m radiusli aylana bo‘ylab 8 m/s tezlikda harakatlanadi. Markazga intilma kuchni toping.</p><button class="secondary" onclick="toggleSolution('sol1')">Yechimini ko‘rsatish</button><div id="sol1" class="solution">F = mv²/r = 0,5 × 8² / 2 = 0,5 × 64 / 2 = <b>16 N</b>.</div></div>
+</section>
+<section id="gravitatsiya">
+<h2>2-reja. Gravitatsiya maydonidagi harakat</h2>
+<div class="grid">
+<div class="card"><h3>Namuna masala 3: erkin tushish</h3><p>Jism tinch holatdan 3 s davomida erkin tushdi. h va v ni toping. Havoning qarshiligini hisobga olmang.</p><div class="formula">h = gt²/2; v = gt</div><p><b>Yechish:</b> h = 9,8 × 3² / 2 = 44,1 m.</p><p>v = 9,8 × 3 = 29,4 m/s.</p><p><b>Javob:</b> h = 44,1 m; v = 29,4 m/s pastga.</p></div>
+<div class="card"><h3>Namuna masala 4: tortishish kuchi</h3><p>Massalari 5 kg va 10 kg bo‘lgan jismlar markazlari orasidagi masofa 2 m. Ular orasidagi tortishish kuchini hisoblang.</p><div class="formula">F = Gm₁m₂/r²</div><p><b>Yechish:</b> F = 6,67×10⁻¹¹ × 5 × 10 / 2² ≈ 8,34×10⁻¹⁰ N.</p><p><b>Javob:</b> taxminan 8,34 × 10⁻¹⁰ N.</p></div>
+</div>
+<div class="card"><h3>Simulyatsiya: erkin tushish</h3><p class="small">Boshlang‘ich tezlik va vaqtni o‘zgartiring. Animatsiyada jismning tushishi, balandlik va tezlik ko‘rsatiladi. Model Yer sirtiga yaqin, g doimiy bo‘lgan holat uchun.</p>
+<div class="controls">
+<div><label for="height">Boshlang‘ich balandlik (m)</label><input id="height" type="number" min="1" max="500" step="1" value="100"></div>
+<div><label for="v0">Boshlang‘ich tezlik pastga (m/s)</label><input id="v0" type="number" min="0" max="40" step="1" value="0"></div>
+<div><label for="fallTime">Vaqt (s)</label><input id="fallTime" type="number" min="0.1" max="10" step="0.1" value="3"></div>
+</div><canvas id="fallCanvas" aria-label="Erkin tushish animatsiyasi"></canvas>
+<div class="result" id="fallResult"></div><button id="fallRun">Animatsiyani boshlash</button><button class="secondary" id="fallStop">To‘xtatish</button><button class="secondary" id="fallReset">Qayta boshlash</button>
+</div>
+<div class="card"><h3>Mustaqil masala</h3><p>Jism 20 m balandlikdan tinch holatdan tushmoqda. Havoning qarshiligini hisobga olmasdan, tushish vaqtini toping. g = 10 m/s² deb oling.</p><button class="secondary" onclick="toggleSolution('sol2')">Yechimini ko‘rsatish</button><div id="sol2" class="solution">h = gt²/2 → t = √(2h/g) = √(40/10) = √4 = <b>2 s</b>.</div></div>
+</section>
+<section id="aralash">
+<h2>3-reja. Aralash masalalar va orbital harakat</h2>
+<div class="grid">
+<div class="card"><h3>Namuna masala 5: yo‘ldosh</h3><p>Sun’iy yo‘ldosh aylana orbitada harakatlanadi. Orbita radiusi r va markaziy jism massasi M ma’lum bo‘lsa, orbital tezlik qanday topiladi?</p><div class="formula">v = √(GM/r)</div><p>Bu natija gravitatsion kuch markazga intilma kuch vazifasini bajarishidan kelib chiqadi: GMm/r² = mv²/r. Yo‘ldosh massasi qisqaradi.</p></div>
+<div class="card"><h3>Namuna masala 6: orbital tezlanish</h3><p>Jism Yer markazidan r masofada aylanmoqda. Gravitatsion tezlanish:</p><div class="formula">g(r) = GM/r²</div><p>Masofa 2 baravar ortsa, g yangi qiymati avvalgisining 1/4 qismiga teng bo‘ladi, chunki tezlanish masofaning kvadratiga teskari proporsional.</p></div>
+</div>
+<div class="card"><h3>Simulyatsiya: gravitatsiya va orbital tezlik</h3><p class="small">Yer massasi va radiusi uchun idealizatsiyalangan model. Orbita radiusi Yer markazidan o‘lchanadi; qiymat Yer radiusidan kichik bo‘lishi mumkin emas.</p>
+<div class="controls">
+<div><label for="orbitAlt">Yer sirtidan balandlik (km)</label><input id="orbitAlt" type="number" min="0" max="100000" step="100" value="400"></div>
+<div><label for="satMass">Yo‘ldosh massasi (kg)</label><input id="satMass" type="number" min="1" max="10000" step="1" value="1000"></div>
+<div><label for="orbitSpeed">Animatsiya tezligi</label><input id="orbitSpeed" type="number" min="0.2" max="3" step="0.1" value="1"></div>
+</div><canvas id="orbitCanvas" aria-label="Yer atrofidagi sun’iy yo‘ldosh animatsiyasi"></canvas>
+<div class="result" id="orbitResult"></div><button id="orbitStart">Boshlash</button><button class="secondary" id="orbitPause">To‘xtatish</button><button class="secondary" id="orbitReset">Qayta boshlash</button>
+</div>
+<div class="card"><h3>Mustaqil aralash masalalar</h3>
+<div class="problem"><b>1.</b> 3 kg jism 6 m radiusli aylana bo‘ylab 4 m/s tezlikda harakatlanadi. Markazga intilma kuchni toping.</div><button class="secondary" onclick="toggleSolution('sol3')">Yechimini ko‘rsatish</button><div id="sol3" class="solution">F = mv²/r = 3 × 16 / 6 = <b>8 N</b>.</div>
+<div class="problem"><b>2.</b> Yer sirtiga yaqin joyda 2 kg jismning og‘irlik kuchini g = 9,8 m/s² deb hisoblang.</div><button class="secondary" onclick="toggleSolution('sol4')">Yechimini ko‘rsatish</button><div id="sol4" class="solution">P = mg = 2 × 9,8 = <b>19,6 N</b>.</div>
+<div class="problem"><b>3.</b> Aylana orbitada gravitatsion kuch 20 N, yo‘ldosh massasi 5 kg, orbital radius 10 m bo‘lsa, orbital tezlikni toping.</div><button class="secondary" onclick="toggleSolution('sol5')">Yechimini ko‘rsatish</button><div id="sol5" class="solution">F = mv²/r → v = √(Fr/m) = √(20 × 10 / 5) = √40 ≈ <b>6,32 m/s</b>.</div>
+</div>
+</section>
+<section id="test">
+<h2>Bilimni tekshirish testi</h2><div class="card"><p>10 ta savolga javob bering, so‘ng “Natijani tekshirish” tugmasini bosing.</p><form id="quizForm">
+<div class="quizq"><b>1. Markazga intilma kuch formulasi qaysi?</b><label><input type="radio" name="q1" value="a"> F = mv/r</label><label><input type="radio" name="q1" value="b"> F = mv²/r</label><label><input type="radio" name="q1" value="c"> F = mr/v²</label><label><input type="radio" name="q1" value="d"> F = mg/r</label></div>
+<div class="quizq"><b>2. Tezlik 2 marta ortib, radius o‘zgarmasa, markazga intilma kuch qanday o‘zgaradi?</b><label><input type="radio" name="q2" value="a"> 2 marta ortadi</label><label><input type="radio" name="q2" value="b"> 4 marta ortadi</label><label><input type="radio" name="q2" value="c"> 2 marta kamayadi</label><label><input type="radio" name="q2" value="d"> O‘zgarmaydi</label></div>
+<div class="quizq"><b>3. Markazga intilma kuch qaysi tomonga yo‘naladi?</b><label><input type="radio" name="q3" value="a"> Harakat yo‘nalishida</label><label><input type="radio" name="q3" value="b"> Markazdan tashqariga</label><label><input type="radio" name="q3" value="c"> Aylana markaziga</label><label><input type="radio" name="q3" value="d"> Doimo yuqoriga</label></div>
+<div class="quizq"><b>4. Gravitatsion tortishish kuchi masofaga qanday bog‘liq?</b><label><input type="radio" name="q4" value="a"> r ga to‘g‘ri proporsional</label><label><input type="radio" name="q4" value="b"> r² ga to‘g‘ri proporsional</label><label><input type="radio" name="q4" value="c"> r² ga teskari proporsional</label><label><input type="radio" name="q4" value="d"> Masofaga bog‘liq emas</label></div>
+<div class="quizq"><b>5. Yer sirtiga yaqin erkin tushish tezlanishi taxminan qancha?</b><label><input type="radio" name="q5" value="a"> 1,6 m/s²</label><label><input type="radio" name="q5" value="b"> 9,8 m/s²</label><label><input type="radio" name="q5" value="c"> 98 m/s²</label><label><input type="radio" name="q5" value="d"> 0 m/s²</label></div>
+<div class="quizq"><b>6. Tinch holatdan erkin tushishda 2 s ichida qancha yo‘l bosiladi? g = 10 m/s².</b><label><input type="radio" name="q6" value="a"> 10 m</label><label><input type="radio" name="q6" value="b"> 20 m</label><label><input type="radio" name="q6" value="c"> 40 m</label><label><input type="radio" name="q6" value="d"> 5 m</label></div>
+<div class="quizq"><b>7. Butun olam tortishish qonunida G nimani bildiradi?</b><label><input type="radio" name="q7" value="a"> Erkin tushish tezlanishi</label><label><input type="radio" name="q7" value="b"> Gravitatsion doimiy</label><label><input type="radio" name="q7" value="c"> Jism og‘irligi</label><label><input type="radio" name="q7" value="d"> Orbital radius</label></div>
+<div class="quizq"><b>8. Agar aylana orbitada F = 8 N, m = 2 kg va r = 4 m bo‘lsa, tezlik qancha?</b><label><input type="radio" name="q8" value="a"> 2 m/s</label><label><input type="radio" name="q8" value="b"> 4 m/s</label><label><input type="radio" name="q8" value="c"> 8 m/s</label><label><input type="radio" name="q8" value="d"> 16 m/s</label></div>
+<div class="quizq"><b>9. Yer sirtiga yaqin potensial energiya formulasi qaysi?</b><label><input type="radio" name="q9" value="a"> Eₚ = mgh</label><label><input type="radio" name="q9" value="b"> Eₚ = mv</label><label><input type="radio" name="q9" value="c"> Eₚ = F/r</label><label><input type="radio" name="q9" value="d"> Eₚ = gt</label></div>
+<div class="quizq"><b>10. Orbital harakatda yo‘ldoshni orbitada ushlab turuvchi kuch qaysi?</b><label><input type="radio" name="q10" value="a"> Ishqalanish kuchi</label><label><input type="radio" name="q10" value="b"> Arximed kuchi</label><label><input type="radio" name="q10" value="c"> Gravitatsion kuch</label><label><input type="radio" name="q10" value="d"> Elektr kuchi</label></div>
+<button type="button" id="checkQuiz">Natijani tekshirish</button><button type="reset" class="secondary" id="resetQuiz">Qayta ishlash</button>
+</form><div id="quizResult" class="result" style="display:none"></div></div>
+</section>
+<section id="xulosa"><div class="card"><h2>Xulosa va eslatmalar</h2><ul><li>Markazga intilma kuch tezlikning kvadratiga to‘g‘ri, radiusga teskari proporsional.</li><li>Gravitatsion kuch jismlarni o‘zaro tortadi va masofa kvadratiga teskari proporsional.</li><li>Erkin tushish formulalarida h = v₀t + gt²/2 va v = v₀ + gt ishlatiladi (pastga yo‘nalish musbat).</li><li>Orbital harakatda gravitatsion kuch markazga intilma kuchni ta’minlaydi.</li><li>Har bir natijani SI birligi bilan yozing va mantiqiyligini tekshiring.</li></ul><button onclick="window.print()" class="secondary">Darsni chop etish</button></div></section>
+</main>
+<footer>4-mavzu · Fizika · Interaktiv HTML5 dars materiali</footer>
+<script>
+function toggleSolution(id){document.getElementById(id).classList.toggle('show')}
+const G=6.67e-11, Mearth=5.97e24, Rearth=6.37e6, g0=9.8;
+function num(id, fallback){const x=parseFloat(document.getElementById(id).value);return Number.isFinite(x)?x:fallback}
+function fmt(x,d=2){return Number(x).toLocaleString('uz-UZ',{maximumFractionDigits:d})}
+function setupCanvas(c){const dpr=window.devicePixelRatio||1,rect=c.getBoundingClientRect();c.width=Math.max(1,Math.floor(rect.width*dpr));c.height=Math.max(1,Math.floor(rect.height*dpr));const ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);return {ctx,w:rect.width,h:rect.height}}
+let circleAngle=0,circleRunning=true,circleLast=0;
+const cc=document.getElementById('circleCanvas');
+function drawArrow(ctx,x1,y1,x2,y2,color,label){ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();let a=Math.atan2(y2-y1,x2-x1);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-9*Math.cos(a-.45),y2-9*Math.sin(a-.45));ctx.lineTo(x2-9*Math.cos(a+.45),y2-9*Math.sin(a+.45));ctx.closePath();ctx.fill();ctx.font='12px system-ui';ctx.fillText(label,x2+5,y2-5)}
+function drawCircle(ts=0){const {ctx,w,h}=setupCanvas(cc);ctx.clearRect(0,0,w,h);const cx=w*.5,cy=h*.52,r=Math.min(w*.29,h*.34);ctx.strokeStyle='#91a7c5';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#225bd6';ctx.beginPath();ctx.arc(cx,cy,5,0,7);ctx.fill();ctx.fillStyle='#60708a';ctx.font='12px system-ui';ctx.fillText('Markaz',cx+8,cy+16);
+const x=cx+r*Math.cos(circleAngle),y=cy+r*Math.sin(circleAngle);ctx.fillStyle='#f59e0b';ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);ctx.fill();drawArrow(ctx,x,y,x-35*Math.sin(circleAngle),y+35*Math.cos(circleAngle),'#138a58','v');drawArrow(ctx,x,y,x+(cx-x)*.42,y+(cy-y)*.42,'#c24141','F');
+const m=num('mass',2),v=num('speed',6),rad=num('radius',4);document.getElementById('circleResult').innerHTML=`<b>Markazga intilma kuch:</b> F = mv²/r = ${fmt(m)} × ${fmt(v)}² / ${fmt(rad)} = <b>${fmt(m*v*v/r)} N</b><br><b>Tezlanish:</b> a = v²/r = ${fmt(v*v/r)} m/s²`;
+if(circleRunning){if(circleLast)circleAngle+=(ts-circleLast)/1000*Math.min(2,v/Math.max(rad,.5));circleLast=ts}else circleLast=0;requestAnimationFrame(drawCircle)}
+document.getElementById('circleStart').onclick=()=>{circleRunning=true};document.getElementById('circlePause').onclick=()=>{circleRunning=false};document.getElementById('circleReset').onclick=()=>{circleAngle=0;circleRunning=false};['mass','speed','radius'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{}));
+let fallProgress=0,fallRunning=false,fallLast=0;const fc=document.getElementById('fallCanvas');
+function fallValues(){let H=Math.max(1,num('height',100)),v0=Math.max(0,num('v0',0)),t=Math.max(.1,num('fallTime',3));return {H,v0,t,dist:v0*t+.5*g0*t*t,vel:v0+g0*t}}
+function drawFall(ts=0){const {ctx,w,h}=setupCanvas(fc);ctx.clearRect(0,0,w,h);let {H,v0,t,dist,vel}=fallValues();let total=Math.min(H,dist),progress=fallProgress;let ground=h-32,top=28,available=ground-top,yy=top+available*progress;
+ctx.strokeStyle='#7b8ca6';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(22,ground);ctx.lineTo(w-22,ground);ctx.stroke();ctx.fillStyle='#225bd6';ctx.fillRect(w*.5-2,top,4,available);ctx.fillStyle='#f59e0b';ctx.beginPath();ctx.arc(w*.5,yy,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#263b5b';ctx.font='13px system-ui';ctx.fillText('Boshlang‘ich balandlik: '+fmt(H)+' m',12,18);
+let actualT=t*progress,actualDist=v0*actualT+.5*g0*actualT*actualT,actualVel=v0+g0*actualT;
+document.getElementById('fallResult').innerHTML=`<b>Berilgan vaqt oxiridagi hisob:</b> h = ${fmt(dist)} m; v = ${fmt(vel)} m/s pastga.${dist>H?'<br><span style="color:#a33">Jism berilgan balandlikdan oldin yerga yetadi; tushish balandligiga mos vaqtni hisobga oling.</span>':''}<br><b>Animatsiya holati:</b> t ≈ ${fmt(actualT)} s; bosib o‘tilgan yo‘l ≈ ${fmt(actualDist)} m; tezlik ≈ ${fmt(actualVel)} m/s`;
+if(fallRunning){fallProgress+=((ts-fallLast)||0)/1000/Math.max(.1,t);fallLast=ts;if(fallProgress>=1){fallProgress=1;fallRunning=false}}else fallLast=0;
+requestAnimationFrame(drawFall)}
+document.getElementById('fallRun').onclick=()=>{fallProgress=0;fallRunning=true};document.getElementById('fallStop').onclick=()=>fallRunning=false;document.getElementById('fallReset').onclick=()=>{fallProgress=0;fallRunning=false};
+['height','v0','fallTime'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{fallProgress=0}));
+let orbitAngle=0,orbitRunning=true,orbitLast=0;const oc=document.getElementById('orbitCanvas');
+function drawOrbit(ts=0){const {ctx,w,h}=setupCanvas(oc);ctx.clearRect(0,0,w,h);let alt=Math.max(0,num('orbitAlt',400))*1000,ms=Math.max(1,num('satMass',1000)),speedAnim=Math.max(.2,num('orbitSpeed',1));let r=Rearth+alt,v=Math.sqrt(G*Mearth/r),period=2*Math.PI*r/v,grav=G*Mearth/r**2,F=ms*grav;
+let cx=w*.5,cy=h*.52,orb=Math.min(w*.39,h*.39),earthR=Math.min(orb*.36,Math.min(w,h)*.18),scale=orb/(r/ Rearth);let drawR=Math.min(orb,earthR*(r/Rearth));drawR=Math.max(earthR,Math.min(orb,drawR));
+ctx.strokeStyle='#91a7c5';ctx.setLineDash([5,5]);ctx.beginPath();ctx.arc(cx,cy,orb,0,2*Math.PI);ctx.stroke();ctx.setLineDash([]);
+const grad=ctx.createRadialGradient(cx-earthR*.3,cy-earthR*.3,2,cx,cy,earthR);grad.addColorStop(0,'#69d6ee');grad.addColorStop(1,'#1760b5');ctx.fillStyle=grad;ctx.beginPath();ctx.arc(cx,cy,earthR,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='12px system-ui';ctx.textAlign='center';ctx.fillText('YER',cx,cy+4);ctx.textAlign='left';
+const x=cx+orb*Math.cos(orbitAngle),y=cy+orb*Math.sin(orbitAngle);ctx.fillStyle='#f59e0b';ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fill();drawArrow(ctx,x,y,x-30*Math.sin(orbitAngle),y+30*Math.cos(orbitAngle),'#138a58','v');drawArrow(ctx,x,y,x+(cx-x)*.25,y+(cy-y)*.25,'#c24141','F');
+document.getElementById('orbitResult').innerHTML=`<b>Orbita radiusi:</b> ${fmt(r/1000,0)} km<br><b>Orbital tezlik:</b> ${fmt(v/1000,3)} km/s<br><b>Aylanish davri:</b> ${(period/60).toLocaleString('uz-UZ',{maximumFractionDigits:1})} min<br><b>Gravitatsion tezlanish:</b> ${fmt(grav,3)} m/s²<br><b>Yo‘ldoshga ta’sir kuchi:</b> ${fmt(F,2)} N`;
+if(orbitRunning){if(orbitLast)orbitAngle+=(ts-orbitLast)/1000*.7*speedAnim;orbitLast=ts}else orbitLast=0;requestAnimationFrame(drawOrbit)}
+document.getElementById('orbitStart').onclick=()=>orbitRunning=true;document.getElementById('orbitPause').onclick=()=>orbitRunning=false;document.getElementById('orbitReset').onclick=()=>{orbitAngle=0;orbitRunning=false};['orbitAlt','satMass','orbitSpeed'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{}));
+const answers={q1:'b',q2:'b',q3:'c',q4:'c',q5:'b',q6:'b',q7:'b',q8:'a',q9:'a',q10:'c'};
+document.getElementById('checkQuiz').onclick=()=>{let score=0,unanswered=0;for(const [q,a] of Object.entries(answers)){let sel=document.querySelector(`input[name="${q}"]:checked`);if(!sel)unanswered++;else if(sel.value===a)score++}let box=document.getElementById('quizResult');box.style.display='block';box.innerHTML=`<b>Natija: ${score}/10 (${score*10}%)</b><br>Javobsiz savollar: ${unanswered}.<br>${score>=9?'A’lo! Mavzularni juda yaxshi o‘zlashtirgansiz.':score>=7?'Yaxshi natija. Xato qilingan savollarni qayta ko‘rib chiqing.':score>=5?'Qoniqarli. Formulalarni takrorlab, masalalarni yana ishlang.':'Formulalar va yechish algoritmini qayta o‘rganib, testni takrorlang.'}`};
+document.getElementById('resetQuiz').onclick=()=>{const b=document.getElementById('quizResult');b.style.display='none';b.innerHTML=''};
+window.addEventListener('resize',()=>{});
+requestAnimationFrame(drawCircle);requestAnimationFrame(drawFall);requestAnimationFrame(drawOrbit);
+</script>
+<script>
+(function(){
+const cv=document.getElementById('vdc'),c=cv.getContext('2d'),W=960,H=540,T=120;
+let t=0,playing=false,last=0;
+const BL='#5aa9ff',OR='#f5a142',GR='#3ddc97',RD='#ff6b6b',DIM='#a9bddb';
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),ease=x=>{x=cl(x);return x*x*(3-2*x)},lerp=(a,b,k)=>a+(b-a)*k;
+function tx(s,x,y,sz,col,al,wt){c.font=(wt||'700')+' '+sz+'px system-ui,Arial,sans-serif';c.fillStyle=col;c.textAlign=al||'center';c.textBaseline='middle';c.fillText(s,x,y)}
+function arr(x,y,X,Y,col,w){w=w||5;const a=Math.atan2(Y-y,X-x),h=8+w*1.6;c.strokeStyle=col;c.fillStyle=col;c.lineWidth=w;c.lineCap='round';c.beginPath();c.moveTo(x,y);c.lineTo(X-Math.cos(a)*h*.6,Y-Math.sin(a)*h*.6);c.stroke();c.beginPath();c.moveTo(X,Y);c.lineTo(X-h*Math.cos(a-.45),Y-h*Math.sin(a-.45));c.lineTo(X-h*Math.cos(a+.45),Y-h*Math.sin(a+.45));c.closePath();c.fill()}
+function ball(x,y,r,col){const g=c.createRadialGradient(x-r*.3,y-r*.3,r*.1,x,y,r);g.addColorStop(0,'#fff');g.addColorStop(1,col);c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,7);c.fill()}
+function ring(cx,cy,r,col,w,dash){c.strokeStyle=col;c.lineWidth=w||3;c.setLineDash(dash||[]);c.beginPath();c.arc(cx,cy,r,0,7);c.stroke();c.setLineDash([])}
+function line(x1,y1,x2,y2,col,w,dash){c.strokeStyle=col;c.lineWidth=w||3;c.lineCap='round';c.setLineDash(dash||[]);c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();c.setLineDash([])}
+function box(x,y,w,h,col){c.save();c.strokeStyle=col;c.lineWidth=3;c.fillStyle='rgba(255,255,255,.07)';c.beginPath();c.roundRect(x,y,w,h,14);c.fill();c.stroke();c.restore()}
+function at(u,u0,fn){if(u>=u0){c.save();c.globalAlpha*=ease((u-u0)/.6);fn();c.restore()}}
+
+const f=(n,d)=>n.toFixed(d).replace('.',',');
+function earth(cx,cy,r){const g=c.createRadialGradient(cx-r*.3,cy-r*.3,r*.1,cx,cy,r);g.addColorStop(0,'#4aa3e8');g.addColorStop(1,'#123e73');c.fillStyle=g;c.beginPath();c.arc(cx,cy,r,0,7);c.fill();c.strokeStyle='rgba(130,210,255,.55)';c.lineWidth=3;c.stroke()}
+function sat(x,y,th){c.save();c.translate(x,y);c.rotate(th+Math.PI/2);c.fillStyle='#dfe8f5';c.fillRect(-6,-6,12,12);c.fillStyle=BL;c.fillRect(-24,-3,15,6);c.fillRect(9,-3,15,6);c.restore()}
+/* 1. Kirish */
+function s1(u){
+  const y=100-20*(1-ease(u/1.2));
+  tx('Masalalar yechish',480,y-20,54,'#fff');
+  at(u,1.2,()=>tx('10-sinf fizika · 4-mavzu · jonli video dars',480,125,22,DIM,'center','600'));
+  const cx=270,cy=320,r=80,th=u*1.5;
+  ring(cx,cy,r,GR,3,[8,8]);
+  for(let k=8;k>=1;k--){c.save();c.globalAlpha*=.05*(9-k);const a=th-k*.1;ball(cx+r*Math.cos(a),cy+r*Math.sin(a),11,BL);c.restore()}
+  const x=cx+r*Math.cos(th),y2=cy+r*Math.sin(th);
+  arr(x,y2,x+(cx-x)*.5,y2+(cy-y2)*.5,OR,4);ball(x,y2,12,BL);ball(cx,cy,5,'#dfe8f5');
+  tx('aylana bo‘ylab harakat',cx,428,18,DIM,'center','600');
+  const tau=u%3,by=210+(396-210)*(tau/3)*(tau/3);
+  line(560,410,820,410,'#7aa0c8',4);
+  for(let k=8;k>=1;k--){const a=Math.max(0,tau-k*.1)/3;c.save();c.globalAlpha*=.05*(9-k);ball(690,210+186*a*a,11,OR);c.restore()}
+  arr(690,by+16,690,by+16+Math.min(60,tau*26),OR,3);ball(690,by,12,OR);
+  tx('erkin tushish',690,428,18,DIM,'center','600');
+}
+/* 2. Algoritm */
+function s2(u){
+  tx('Masala yechish algoritmi',480,40,32,'#fff');
+  const st=['Berilganlarni yozing','Topilishi kerak bo‘lgan kattalikni aniqlang','Mos formulani tanlang','Qiymatlarni SI birliklariga o‘tkazing','Hisoblang va javobni birlik bilan yozing'],cols=[BL,GR,OR,BL,GR];
+  st.forEach((s,i)=>at(u,1+3.2*i,()=>{ball(110,105+i*68,22,cols[i]);tx(String(i+1),110,106+i*68,24,'#06223b');tx(s,155,105+i*68,28,'#fff','left','600')}));
+  at(u,16.5,()=>tx('G = 6,67·10⁻¹¹ N·m²/kg²     g ≈ 9,8 m/s²     R ≈ 6,37·10⁶ m',480,432,20,DIM,'center','600'));
+}
+/* 3. Markazga intilma kuch */
+function s3(u){
+  tx('1-masala: markazga intilma kuch',480,40,30,'#fff');
+  const cx=250,cy=250,r=110,th=1.2*u,x=cx+r*Math.cos(th),y=cy+r*Math.sin(th);
+  ring(cx,cy,r,GR,3,[8,8]);ball(cx,cy,5,'#dfe8f5');line(cx,cy,x,y,'rgba(255,255,255,.4)',2,[5,5]);
+  arr(x,y,x-Math.sin(th)*70,y+Math.cos(th)*70,BL,4);arr(x,y,x+(cx-x)*.45,y+(cy-y)*.45,OR,4);ball(x,y,13,BL);
+  tx('m = 2 kg',cx,cy-6,20,DIM);tx('r = 4 m',cx,cy+20,20,DIM);
+  at(u,1,()=>tx('m = 2 kg,  v = 6 m/s,  r = 4 m',520,100,22,'#fff','left'));
+  at(u,5,()=>tx('F = m · v² / r',520,155,36,GR,'left'));
+  at(u,9,()=>tx('F = 2 · 6² / 4 = 72 / 4',520,210,28,'#fff','left'));
+  at(u,13,()=>{box(515,240,250,72,GR);tx('F = 18 N',640,277,44,GR)});
+  at(u,16.5,()=>{tx('2-masala: avtomobil, r = 10 m, v = 5 m/s',520,355,20,DIM,'left','600');tx('a = v² / r = 25 / 10 = 2,5 m/s²',520,392,26,OR,'left')});
+}
+/* 4. Erkin tushish */
+function s4(u){
+  tx('3-masala: erkin tushish',480,40,30,'#fff');
+  const g=9.8,ts=cl((u-1)*.5,0,3),h=g*ts*ts/2,px=6.7,top=100,bx=250,y=top+h*px,v=g*ts;
+  line(120,410,420,410,'#7aa0c8',4);
+  [1,2,3].forEach(s=>{if(ts>=s){const hh=g*s*s/2,yy=top+hh*px;ball(bx,yy,4,'#fff');tx(s+' s:  '+f(hh,1)+' m',bx+28,yy,18,DIM,'left')}});
+  arr(bx,y+16,bx,y+16+v*1.5,OR,4);ball(bx,y,14,BL);
+  at(u,.3,()=>tx('t = 3 s,  v₀ = 0',520,100,24,'#fff','left'));
+  at(u,5,()=>tx('h = g · t² / 2 = 9,8 · 9 / 2 = 44,1 m',520,160,24,GR,'left'));
+  at(u,8,()=>tx('v = g · t = 9,8 · 3 = 29,4 m/s',520,215,24,OR,'left'));
+  at(u,11,()=>{box(515,245,400,66,GR);tx('h = 44,1 m,  v = 29,4 m/s',715,278,28,GR)});
+  at(u,16,()=>{tx('Mustaqil: h = 20 m, g = 10 m/s²',520,360,20,DIM,'left','600');tx('t = √(2h/g) = √4 = 2 s',520,395,26,BL,'left')});
+}
+/* 5. Tortishish kuchi */
+function s5(u){
+  tx('4-masala: tortishish kuchi',480,40,30,'#fff');
+  const x1=360,x2=600,cy=205;
+  at(u,.3,()=>tx('m₁ = 5 kg,  m₂ = 10 kg,  r = 2 m',480,92,24,'#fff'));
+  ball(x1,cy,28,BL);ball(x2,cy,38,GR);tx('5 kg',x1,cy,18,'#06223b');tx('10 kg',x2,cy,18,'#06223b');
+  arr(x1+34,cy,x1+34+50,cy,OR,4);arr(x2-44,cy,x2-44-50,cy,OR,4);tx('F',x1+60,cy-20,22,OR);tx('F',x2-70,cy-20,22,OR);
+  line(x1,270,x2,270,'rgba(255,255,255,.6)',2);line(x1,260,x1,280,'rgba(255,255,255,.6)',2);line(x2,260,x2,280,'rgba(255,255,255,.6)',2);tx('r = 2 m',480,292,22,'#fff');
+  at(u,4,()=>tx('F = G · m₁ · m₂ / r²',480,335,36,GR));
+  at(u,8,()=>tx('F = 6,67·10⁻¹¹ · 5 · 10 / 2² ≈ 8,34·10⁻¹⁰ N',480,382,26,'#fff'));
+  at(u,12,()=>tx('Juda kichik kuch!',480,425,26,OR));
+}
+/* 6. Orbital tezlik */
+function s6(u){
+  tx('5-masala: orbital tezlik',480,40,30,'#fff');
+  const cx=250,cy=250,r=130,th=.9*u,x=cx+r*Math.cos(th),y=cy+r*Math.sin(th);
+  earth(cx,cy,50);ring(cx,cy,r,GR,2,[6,8]);arr(x,y,x+(cx-x)*.3,y+(cy-y)*.3,OR,3);sat(x,y,th);
+  at(u,.5,()=>tx('Gravitatsiya kuchi = markazga intilma kuch',520,100,20,DIM,'left','600'));
+  at(u,2,()=>tx('GMm / r² = mv² / r',520,155,34,OR,'left'));
+  at(u,4.5,()=>tx('m qisqaradi  ⇒',520,210,24,DIM,'left'));
+  at(u,6,()=>tx('v = √(GM / r)',520,265,40,GR,'left'));
+  at(u,9,()=>{tx('g(r) = GM / r²',520,335,28,'#fff','left');tx('r — 2 marta oshsa,  g — 4 marta kamayadi',520,375,22,OR,'left')});
+}
+/* 7. Xulosa */
+function s7(u){
+  tx('Xulosa',480,45,34,'#fff');
+  at(u,.3,()=>tx('F = m · v² / r',480,120,38,GR));
+  at(u,1.4,()=>tx('h = g · t² / 2,   v = g · t',480,190,38,OR));
+  at(u,2.5,()=>tx('F = G · m₁ · m₂ / r²',480,260,38,BL));
+  at(u,3.6,()=>tx('v = √(GM / r)',480,330,38,'#fff'));
+  at(u,4.6,()=>tx('Javobni doim birligi bilan yozing!',480,405,24,DIM,'center','600'));
+}
+const SC=[[0,12,s1],[12,32,s2],[32,55,s3],[55,80,s4],[80,100,s5],[100,114,s6],[114,120,s7]];
+const CH=['Kirish','Algoritm','Markazga intilma','Erkin tushish','Tortishish','Orbita','Xulosa'];
+const CAP=[
+[0,12,'Salom! Bugun markazga intilma kuch va gravitatsiya maydonidagi harakatga doir masalalarni birgalikda yechamiz.'],
+[12,20,'Har qanday masalani bosqichma-bosqich yechamiz: avval berilganlar va topilishi kerak bo‘lgan kattalik yoziladi.'],
+[20,32,'So‘ng mos formula tanlanadi, qiymatlar SI birliklariga o‘tkaziladi, hisoblanadi va javob birligi bilan yoziladi.'],
+[32,40,'1-masala: massasi 2 kg jism radiusi 4 m aylana bo‘ylab 6 m/s tezlik bilan harakatlanmoqda. Markazga intilma kuchni toping.'],
+[40,48,'F = mv²/r formulasiga qiymatlarni qo‘yamiz: 2 · 36 / 4 = 18 nyuton.'],
+[48,55,'Avtomobil 10 m radiusli burilishdan 5 m/s tezlikda o‘tsa, markazga intilma tezlanish 2,5 m/s² bo‘ladi.'],
+[55,63,'3-masala: jism tinch holatdan 3 sekund davomida erkin tushdi. Bosib o‘tgan yo‘lini va oxirgi tezligini topamiz.'],
+[63,71,'h = gt²/2 = 9,8 · 9 / 2 = 44,1 m, tezlik esa v = gt = 29,4 m/s.'],
+[71,80,'Mustaqil masala: 20 m balandlikdan tushish vaqti t = √(2h/g) = 2 s (g = 10 m/s² deb olinsa).'],
+[80,88,'4-masala: massalari 5 kg va 10 kg bo‘lgan jismlar markazlari orasidagi masofa 2 m. Ular qanday kuch bilan tortishadi?'],
+[88,100,'F = G·m₁·m₂/r² ga qo‘yamiz: taxminan 8,34 · 10⁻¹⁰ nyuton. Kichik jismlar orasidagi tortishish nihoyatda kuchsiz.'],
+[100,107,'5-masala: orbitada gravitatsion kuch markazga intilma kuch vazifasini bajaradi: GMm/r² = mv²/r.'],
+[107,114,'Yo‘ldosh massasi qisqaradi, shuning uchun v = √(GM/r). Masofa 2 marta oshsa, g 4 marta kamayadi.'],
+[114,120,'Xulosa: masalani algoritm bo‘yicha yeching, formulani to‘g‘ri tanlang va javobni doim birligi bilan yozing.']
+];
+function wrap(s,mw){const ws=s.split(' '),ls=[];let cur='';ws.forEach(w=>{const n=cur?cur+' '+w:w;if(c.measureText(n).width>mw&&cur){ls.push(cur);cur=w}else cur=n});if(cur)ls.push(cur);return ls}
+function draw(){
+  const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0f1e3a');g.addColorStop(1,'#1b3a6b');c.fillStyle=g;c.fillRect(0,0,W,H);
+  c.strokeStyle='rgba(255,255,255,.04)';c.lineWidth=1;for(let x=0;x<W;x+=40){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}for(let y=0;y<H;y+=40){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}
+  const tt=Math.min(t,T-.01);
+  SC.forEach((s,i)=>{if(tt>=s[0]&&tt<s[1]){const u=tt-s[0];c.save();c.globalAlpha=Math.min(1,u/.7,i===SC.length-1?9:(s[1]-tt)/.7);s[2](u);c.restore()}});
+  const cp=CAP.find(a=>tt>=a[0]&&tt<a[1]);
+  if(cp){c.fillStyle='rgba(8,16,32,.82)';c.fillRect(0,H-88,W,88);c.font='600 24px system-ui,Arial,sans-serif';const ls=wrap(cp[2],860);ls.forEach((l,i)=>tx(l,W/2,H-44-(ls.length-1)*16+i*32,24,'#fff','center','600'))}
+  const ci=SC.findIndex(s=>tt>=s[0]&&tt<s[1]);tx((ci+1)+'/7 · '+CH[ci],W-18,18,16,'rgba(255,255,255,.55)','right','600');
+  c.fillStyle=GR;c.fillRect(0,H-4,W*t/T,4);
+  if(!playing){c.fillStyle='rgba(8,16,32,.45)';c.fillRect(0,0,W,H-88);c.fillStyle='rgba(255,255,255,.95)';c.beginPath();c.arc(W/2,235,46,0,7);c.fill();
+    if(t>=T-.01){tx('↻',W/2,236,52,'#142747');tx('Qayta ko‘rish',W/2,305,26,'#fff')}
+    else{c.fillStyle='#142747';c.beginPath();c.moveTo(W/2-14,213);c.lineTo(W/2+20,235);c.lineTo(W/2-14,257);c.closePath();c.fill();if(t<.05)tx('Videoni boshlash',W/2,305,26,'#fff')}}
+}
+const bp=document.getElementById('vdp'),sl=document.getElementById('vds'),tl=document.getElementById('vdt'),pan=document.getElementById('video');
+const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+function setPlay(p){if(p&&t>=T)t=0;playing=p;last=performance.now();bp.textContent=p?'Ⅱ':'▶'}
+bp.onclick=()=>setPlay(!playing);cv.onclick=()=>setPlay(!playing);
+sl.oninput=()=>{t=sl.value/10};
+document.getElementById('vdf').onclick=()=>{const w=document.getElementById('vdw');if(document.fullscreenElement)document.exitFullscreen();else if(w.requestFullscreen)w.requestFullscreen()};
+const chw=document.getElementById('vdch');
+SC.forEach((s,i)=>{const b=document.createElement('button');b.textContent=(i+1)+'. '+CH[i];b.onclick=()=>{t=s[0];setPlay(true)};chw.appendChild(b)});
+function frame(now){
+  if(true){
+    if(playing){t+=Math.min(.1,(now-last)/1000);if(t>=T){t=T;playing=false;bp.textContent='▶'}}
+    last=now;draw();if(document.activeElement!==sl)sl.value=t*10;tl.textContent=fmt(t)+' / 2:00';
+  }else if(playing){setPlay(false)}
+  requestAnimationFrame(frame)
+}
+requestAnimationFrame(frame);
+window.__vd={draw,set:v=>{t=v}};
+})();
+</script>
+</body>
+</html>
